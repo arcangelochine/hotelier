@@ -25,7 +25,7 @@ public class JsonFactory<T> {
         return gson.fromJson(reader, type);
     }
 
-    public T loadList(String fileName) throws Exception {
+    public List<T> loadList(String fileName) throws Exception {
         JsonReader reader = new JsonReader(new FileReader(fileName));
 
         return gson.fromJson(reader, typeList);
