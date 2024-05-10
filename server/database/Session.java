@@ -1,14 +1,12 @@
 package database;
 
 import utility.JsonFactory;
-import utility.Logger;
 
 import java.util.Date;
 import java.util.List;
 
 public class Session implements Comparable<Session> {
     private static final String SESSION_FILE = "sessions.json";
-    private static final Logger logger = Logger.getInstance();
 
     private static final JsonTable<Session> table = new JsonTable<>(SESSION_FILE, new JsonFactory<>());
 

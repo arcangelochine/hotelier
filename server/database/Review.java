@@ -1,7 +1,6 @@
 package database;
 
 import utility.JsonFactory;
-import utility.Logger;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -9,7 +8,6 @@ import java.util.List;
 
 public class Review {
     private static final String REVIEW_FILE = "reviews.json";
-    private static final Logger logger = Logger.getInstance();
 
     private static final JsonTable<Review> table = new JsonTable<>(REVIEW_FILE, new JsonFactory<>());
 

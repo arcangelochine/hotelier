@@ -1,13 +1,11 @@
 package database;
 
 import utility.JsonFactory;
-import utility.Logger;
 
 import java.util.List;
 
 public class User implements Comparable<User> {
     private static final String USER_FILE = "users.json";
-    private static final Logger logger = Logger.getInstance();
 
     private static final JsonTable<User> table = new JsonTable<>(USER_FILE, new JsonFactory<>());
 
