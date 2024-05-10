@@ -1,14 +1,12 @@
 package database;
 
-import utility.JsonFactory;
-
 import java.util.HashMap;
 import java.util.List;
 
 public final class Hotel {
     private static final String HOTEL_FILE = "hotels.json";
 
-    private static final JsonTable<Hotel> table = new JsonTable<>(HOTEL_FILE, new JsonFactory<>());
+    private static final JsonTable<Hotel> table = new JsonTable<>(HOTEL_FILE);
 
     private Integer id;
     private String name;

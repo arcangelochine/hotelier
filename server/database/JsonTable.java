@@ -10,11 +10,10 @@ public class JsonTable<T> {
     private static final Logger logger = Logger.getInstance();
 
     private final String fileName;
-    private final JsonFactory<T> json;
+    private final JsonFactory<T> json = new JsonFactory<>();
 
-    public JsonTable(String _fileName, JsonFactory<T> _json) {
+    public JsonTable(String _fileName) {
         fileName = _fileName;
-        json = _json;
     }
 
     public List<T> load() {
