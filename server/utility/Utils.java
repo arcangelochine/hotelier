@@ -1,3 +1,5 @@
+package utility;
+
 public final class Utils {
     public static <T extends Comparable<T>> T clamp(T value, T min, T max) {
         if (value.compareTo(min) < 0)
