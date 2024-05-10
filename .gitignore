@@ -3,6 +3,7 @@
 *.iml
 *.xml
 *.json
+*.log
 .DS_Store
 
 !lib/*.jar
