@@ -1,6 +1,6 @@
 LIBS = lib/gson-2.10.1.jar
 
-SERVER_DEPS = server/*.class server/database/*.class server/util/*.class
+SERVER_DEPS = server/*.class server/database/*.class server/util/*.class server/core/*.class
 
 server:
 	javac -cp $(LIBS):src -d . src/server/HOTELIERServerMain.java;
