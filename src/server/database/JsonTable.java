@@ -1,7 +1,7 @@
-package database;
+package server.database;
 
-import utility.JsonFactory;
-import utility.Logger;
+import server.util.JsonFactory;
+import server.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

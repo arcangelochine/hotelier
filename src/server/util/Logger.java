@@ -1,4 +1,4 @@
-package utility;
+package server.util;
 
 import java.io.PrintWriter;
 import java.time.LocalDateTime;

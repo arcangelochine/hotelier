@@ -1,6 +1,6 @@
-package database;
+package server.database;
 
-import utility.Logger;
+import server.util.Logger;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,9 +28,9 @@ public final class Database {
 
     private Database() {
         hotels.putAll(Hotel.load().stream().collect(Collectors.groupingBy(Hotel::getCity)));
-        reviews.putAll(Review.load().stream().collect(Collectors.groupingBy(Review::getHotel)));
-        users.addAll(User.load());
-        sessions.addAll(Session.load());
+        // reviews.putAll(Review.load().stream().collect(Collectors.groupingBy(Review::getHotel)));
+        // users.addAll(User.load());
+        // sessions.addAll(Session.load());
     }
 
     public synchronized static Database getInstance() {
