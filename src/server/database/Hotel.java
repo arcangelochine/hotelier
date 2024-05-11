@@ -6,7 +6,7 @@ import java.util.List;
 public final class Hotel {
     private static final String HOTEL_FILE = "hotels.json";
 
-    private static final JsonTable<Hotel> table = new JsonTable<>(HOTEL_FILE);
+    private static final JsonTable<Hotel> table = new HotelTable(HOTEL_FILE);
 
     private Integer id;
     private String name;
@@ -31,5 +31,12 @@ public final class Hotel {
 
     public Integer getId() {
         return id;
+    }
+
+    private static final class HotelTable extends JsonTable<Hotel> {
+
+        public HotelTable(String _fileName) {
+            super(_fileName);
+        }
     }
 }

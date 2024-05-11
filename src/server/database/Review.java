@@ -7,7 +7,7 @@ import java.util.List;
 public final class Review {
     private static final String REVIEW_FILE = "reviews.json";
 
-    private static final JsonTable<Review> table = new JsonTable<>(REVIEW_FILE);
+    private static final JsonTable<Review> table = new ReviewTable(REVIEW_FILE);
 
     private int hotel;
     private String user;
@@ -26,5 +26,12 @@ public final class Review {
 
     public int getHotel() {
         return hotel;
+    }
+
+    private static final class ReviewTable extends JsonTable<Review> {
+
+        public ReviewTable(String _fileName) {
+            super(_fileName);
+        }
     }
 }

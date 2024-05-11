@@ -1,7 +1,6 @@
 package server.util;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -12,19 +11,30 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public abstract class JsonFactory<T> {
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+public class JsonFactory<T> {
+    private static final Gson gson = new Gson();
 
     private final Type type;
     private final Type typeList;
 
     protected JsonFactory() {
         Type superclass = getClass().getGenericSuperclass();
-        Type temp = ((ParameterizedType) superclass).getActualTypeArguments()[0];
-        ListType tempList = new ListType(temp);
+        Type type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+        ListType listType = new ListType(type);
 
-        type = TypeToken.get(temp).getType();
-        typeList = TypeToken.get(tempList).getType();
+        this.type = TypeToken.get(type).getType();
+        this.typeList = TypeToken.get(listType).getType();
+    }
+
+    private JsonFactory(Type type) {
+        ListType tempList = new ListType(type);
+
+        this.type = TypeToken.get(type).getType();
+        this.typeList = TypeToken.get(tempList).getType();
+    }
+
+    public static JsonFactory<?> get(Type type) {
+        return new JsonFactory<>(type);
     }
 
     public T load(String fileName) throws Exception {
@@ -41,6 +51,7 @@ public abstract class JsonFactory<T> {
 
     public void save(String fileName, T object) throws Exception {
         JsonWriter writer = new JsonWriter(new FileWriter(fileName));
+        writer.setIndent(" ");
 
         gson.toJson(object, type, writer);
         writer.close();
@@ -48,6 +59,7 @@ public abstract class JsonFactory<T> {
 
     public void saveList(String fileName, List<T> objects) throws Exception {
         JsonWriter writer = new JsonWriter(new FileWriter(fileName));
+        writer.setIndent(" ");
 
         gson.toJson(objects, typeList, writer);
         writer.close();

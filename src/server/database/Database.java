@@ -28,9 +28,9 @@ public final class Database {
 
     private Database() {
         hotels.putAll(Hotel.load().stream().collect(Collectors.groupingBy(Hotel::getCity)));
-        // reviews.putAll(Review.load().stream().collect(Collectors.groupingBy(Review::getHotel)));
-        // users.addAll(User.load());
-        // sessions.addAll(Session.load());
+        reviews.putAll(Review.load().stream().collect(Collectors.groupingBy(Review::getHotel)));
+        users.addAll(User.load());
+        sessions.addAll(Session.load());
     }
 
     public synchronized static Database getInstance() {
@@ -42,6 +42,10 @@ public final class Database {
     private static void create() {
         instance = new Database();
         logger.out("Database created.");
+    }
+
+    public List<Hotel> getHotels(String city) {
+        return hotels.get(city);
     }
 
     /**

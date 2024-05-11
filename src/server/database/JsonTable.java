@@ -3,17 +3,25 @@ package server.database;
 import server.util.JsonFactory;
 import server.util.Logger;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class JsonTable<T> {
+public abstract class JsonTable<T> {
     private static final Logger logger = Logger.getInstance();
 
     private final String fileName;
-    private final JsonFactory<T> json = new JsonFactory<>();
+    private final JsonFactory<T> json;
 
+    @SuppressWarnings("unchecked")
     public JsonTable(String _fileName) {
         fileName = _fileName;
+
+        Type superclass = getClass().getGenericSuperclass();
+        Type type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+
+        json = (JsonFactory<T>) JsonFactory.get(type);
     }
 
     public List<T> load() {
@@ -35,4 +43,5 @@ public final class JsonTable<T> {
             logger.err("Failed to save items to " + fileName);
         }
     }
+
 }
