@@ -51,7 +51,7 @@ public class JsonFactory<T> {
 
     public void save(String fileName, T object) throws Exception {
         JsonWriter writer = new JsonWriter(new FileWriter(fileName));
-        writer.setIndent(" ");
+        writer.setIndent("    ");
 
         gson.toJson(object, type, writer);
         writer.close();
@@ -59,7 +59,7 @@ public class JsonFactory<T> {
 
     public void saveList(String fileName, List<T> objects) throws Exception {
         JsonWriter writer = new JsonWriter(new FileWriter(fileName));
-        writer.setIndent(" ");
+        writer.setIndent("    ");
 
         gson.toJson(objects, typeList, writer);
         writer.close();
