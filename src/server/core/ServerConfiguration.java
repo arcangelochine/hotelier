@@ -1,4 +1,4 @@
-package server;
+package server.core;
 
 import server.util.JsonFactory;
 import server.util.Logger;

@@ -1,6 +1,5 @@
 package server.core;
 
-import server.ServerConfiguration;
 import server.util.Logger;
 
 import java.io.IOException;

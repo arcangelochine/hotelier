@@ -1,6 +1,5 @@
 package server.core;
 
-import server.ServerConfiguration;
 import server.database.Database;
 import server.util.Logger;
 
