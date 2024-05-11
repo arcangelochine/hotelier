@@ -13,7 +13,7 @@ public final class Logger implements AutoCloseable {
         writer = new PrintWriter(LOG_FILE);
     }
 
-    public synchronized static Logger getInstance() {
+    public static Logger getInstance() {
         if (instance == null)
             create();
         return instance;

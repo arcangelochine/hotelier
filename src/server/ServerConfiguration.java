@@ -43,7 +43,7 @@ public final class ServerConfiguration {
         return threads;
     }
 
-    public synchronized static ServerConfiguration getInstance() {
+    public static ServerConfiguration getInstance() {
         if (instance == null)
             create();
         return instance;

@@ -33,7 +33,7 @@ public final class Database {
         sessions.addAll(Session.load());
     }
 
-    public synchronized static Database getInstance() {
+    public static Database getInstance() {
         if (instance == null)
             create();
         return instance;
