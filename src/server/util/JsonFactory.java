@@ -8,16 +8,24 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public final class JsonFactory<T> {
-    private static final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .create();
+public abstract class JsonFactory<T> {
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    private final Type type = new TypeToken<T>() {}.getType();
-    private final Type typeList = new TypeToken<List<T>>() {}.getType();
+    private final Type type;
+    private final Type typeList;
+
+    protected JsonFactory() {
+        Type superclass = getClass().getGenericSuperclass();
+        Type temp = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+        ListType tempList = new ListType(temp);
+
+        type = TypeToken.get(temp).getType();
+        typeList = TypeToken.get(tempList).getType();
+    }
 
     public T load(String fileName) throws Exception {
         JsonReader reader = new JsonReader(new FileReader(fileName));
@@ -43,5 +51,28 @@ public final class JsonFactory<T> {
 
         gson.toJson(objects, typeList, writer);
         writer.close();
+    }
+
+    private static final class ListType implements ParameterizedType {
+        private final Type type;
+
+        public ListType(Type _type) {
+            type = _type;
+        }
+
+        @Override
+        public Type[] getActualTypeArguments() {
+            return new Type[] {type};
+        }
+
+        @Override
+        public Type getRawType() {
+            return List.class;
+        }
+
+        @Override
+        public Type getOwnerType() {
+            return null;
+        }
     }
 }
