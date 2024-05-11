@@ -2,7 +2,7 @@ package server;
 
 import server.util.Logger;
 
-class HOTELIERServerMain {
+public final class HOTELIERServerMain {
     private static final String HOTEL_DATABASE = "hotels.json";
 
     private static final Logger logger = Logger.getInstance();

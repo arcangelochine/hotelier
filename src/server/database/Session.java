@@ -3,7 +3,7 @@ package server.database;
 import java.util.Date;
 import java.util.List;
 
-public class Session implements Comparable<Session> {
+public final class Session implements Comparable<Session> {
     private static final String SESSION_FILE = "sessions.json";
 
     private static final JsonTable<Session> table = new JsonTable<>(SESSION_FILE);

@@ -3,7 +3,7 @@ package server.util;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 
-public class Logger implements AutoCloseable {
+public final class Logger implements AutoCloseable {
     private static final String LOG_FILE = "hotelier.log";
 
     private volatile static Logger instance;

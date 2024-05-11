@@ -2,7 +2,7 @@ package server.database;
 
 import java.util.List;
 
-public class User implements Comparable<User> {
+public final class User implements Comparable<User> {
     private static final String USER_FILE = "users.json";
 
     private static final JsonTable<User> table = new JsonTable<>(USER_FILE);

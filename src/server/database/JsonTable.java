@@ -6,7 +6,7 @@ import server.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonTable<T> {
+public final class JsonTable<T> {
     private static final Logger logger = Logger.getInstance();
 
     private final String fileName;

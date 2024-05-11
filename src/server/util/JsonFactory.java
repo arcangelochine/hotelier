@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class JsonFactory<T> {
+public final class JsonFactory<T> {
     private static final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .create();
