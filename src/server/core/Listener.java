@@ -60,7 +60,7 @@ public final class Listener {
                 else
                     throw new IOException();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.err("Internal server error: " + e.getMessage());
         }
     }
