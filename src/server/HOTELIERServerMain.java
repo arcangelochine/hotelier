@@ -1,10 +1,9 @@
 package server;
 
+import server.core.Server;
 import server.util.Logger;
 
 public final class HOTELIERServerMain {
-    private static final String HOTEL_DATABASE = "hotels.json";
-
     private static final Logger logger = Logger.getInstance();
     private static final Server server = Server.getInstance();
 
@@ -17,11 +16,7 @@ public final class HOTELIERServerMain {
     }
 
     private static void setup() {
-        ServerConfiguration serverConfiguration = ServerConfiguration.getInstance();
-
-        // Hotel.loadHotels(HOTEL_DATABASE);
-
-        server.setup(serverConfiguration);
+        server.setup();
 
         logger.log("Setup completed.");
     }
