@@ -1,12 +1,13 @@
 package server.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -37,19 +38,19 @@ public class JsonFactory<T> {
         return new JsonFactory<>(type);
     }
 
-    public T load(String fileName) throws Exception {
+    public T load(String fileName) throws IOException, JsonIOException, JsonSyntaxException {
         JsonReader reader = new JsonReader(new FileReader(fileName));
 
         return gson.fromJson(reader, type);
     }
 
-    public List<T> loadList(String fileName) throws Exception {
+    public List<T> loadList(String fileName) throws IOException, JsonIOException, JsonSyntaxException {
         JsonReader reader = new JsonReader(new FileReader(fileName));
 
         return gson.fromJson(reader, typeList);
     }
 
-    public void save(String fileName, T object) throws Exception {
+    public void save(String fileName, T object) throws IOException, JsonIOException {
         JsonWriter writer = new JsonWriter(new FileWriter(fileName));
         writer.setIndent("    ");
 
@@ -57,12 +58,22 @@ public class JsonFactory<T> {
         writer.close();
     }
 
-    public void saveList(String fileName, List<T> objects) throws Exception {
+    public void saveList(String fileName, List<T> objects) throws IOException, JsonIOException {
         JsonWriter writer = new JsonWriter(new FileWriter(fileName));
         writer.setIndent("    ");
 
         gson.toJson(objects, typeList, writer);
         writer.close();
+    }
+
+    public String toJson(T object) {
+        return gson.toJson(object, type);
+    }
+
+    public T fromJson(String json) throws JsonSyntaxException {
+        JsonReader reader = new JsonReader(new StringReader(json));
+
+        return gson.fromJson(reader, type);
     }
 
     private static final class ListType implements ParameterizedType {
