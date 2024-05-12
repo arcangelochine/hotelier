@@ -48,6 +48,14 @@ public final class Database {
         return hotels.get(city);
     }
 
+    public ConcurrentSkipListSet<User> getUsers() {
+        return users;
+    }
+
+    public ConcurrentSkipListSet<Session> getSessions() {
+        return sessions;
+    }
+
     /**
      * Rende permanenti le modifiche sul database.
      * Se fallisce la scrittura di una tabella non è garantita la consistenza dei dati.

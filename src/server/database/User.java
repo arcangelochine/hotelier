@@ -1,7 +1,5 @@
 package server.database;
 
-import server.util.JsonFactory;
-
 import java.util.List;
 
 public final class User implements Comparable<User> {
@@ -9,9 +7,27 @@ public final class User implements Comparable<User> {
 
     private static final JsonTable<User> table = new UserTable(USER_FILE);
 
-    private String username;
-    private String password;
-    private String salt;
+    private final String username;
+    private final String password;
+    private final String salt;
+
+    public User(String username, String password, String salt) {
+        this.username = username;
+        this.password = password;
+        this.salt = salt;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
 
     public static List<User> load() {
         return table.load();
