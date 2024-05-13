@@ -40,6 +40,10 @@ public final class Session implements Comparable<Session> {
         this.expires = expires;
     }
 
+    public boolean isExpired() {
+        return expires.isBefore(LocalDateTime.now());
+    }
+
     public static List<Session> load() {
         return table.load();
     }

@@ -44,8 +44,12 @@ public final class Database {
         logger.out("Database created.");
     }
 
-    public List<Hotel> getHotels(String city) {
-        return hotels.get(city);
+    public ConcurrentHashMap<String, List<Hotel>> getHotels() {
+        return hotels;
+    }
+
+    public ConcurrentHashMap<Integer, List<Review>> getReviews() {
+        return reviews;
     }
 
     public ConcurrentSkipListSet<User> getUsers() {

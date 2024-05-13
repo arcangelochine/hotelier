@@ -1,6 +1,6 @@
 package server.database;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,10 +11,37 @@ public final class Review {
 
     private int hotel;
     private String user;
-    private Date date;
+    private LocalDateTime date;
     private float rate;
     private final HashMap<String, Float> ratings = new HashMap<>();
-    private String body;
+
+    public int getHotel() {
+        return hotel;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public float getRate() {
+        return rate;
+    }
+
+    public HashMap<String, Float> getRatings() {
+        return ratings;
+    }
+
+    public String toJson() {
+        return table.toJson(this);
+    }
+
+    public static Review fromJson(String obj) {
+        return table.fromJson(obj);
+    }
 
     public static List<Review> load() {
         return table.load();
@@ -22,10 +49,6 @@ public final class Review {
 
     public static void save(List<Review> reviews) {
         table.save(reviews);
-    }
-
-    public int getHotel() {
-        return hotel;
     }
 
     private static final class ReviewTable extends JsonTable<Review> {

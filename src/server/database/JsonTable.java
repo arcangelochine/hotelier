@@ -44,4 +44,11 @@ public abstract class JsonTable<T> {
         }
     }
 
+    public String toJson(T obj) {
+        return json.toJson(obj);
+    }
+
+    public T fromJson(String j) {
+        return json.fromJson(j);
+    }
 }

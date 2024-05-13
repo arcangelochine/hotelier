@@ -3,18 +3,40 @@ package server.database;
 import java.util.List;
 
 public final class User implements Comparable<User> {
+    public enum Badge {
+        NOVICE,
+        JUNIOR,
+        INTERMEDIATE,
+        SENIOR,
+        EXPERT;
+
+        public Badge upgrade() {
+            if (this == EXPERT)
+                return this;
+
+            return Badge.values()[this.ordinal() + 1];
+        }
+
+        public Badge downgrade() {
+            if (this == NOVICE)
+                return this;
+
+            return Badge.values()[this.ordinal() - 1];
+        }
+    }
+
     private static final String USER_FILE = "users.json";
 
     private static final JsonTable<User> table = new UserTable(USER_FILE);
 
     private final String username;
     private final String password;
-    private final String salt;
+    private Badge badge;
 
-    public User(String username, String password, String salt) {
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.salt = salt;
+        this.badge = Badge.NOVICE;
     }
 
     public String getUsername() {
@@ -25,8 +47,28 @@ public final class User implements Comparable<User> {
         return password;
     }
 
-    public String getSalt() {
-        return salt;
+    public Badge getBadge() {
+        return badge;
+    }
+
+    public Badge upgradeBadge() {
+        badge = badge.upgrade();
+
+        return badge;
+    }
+
+    public Badge downgradeBadge() {
+        badge = badge.downgrade();
+
+        return badge;
+    }
+
+    public String toJson() {
+        return table.toJson(this);
+    }
+
+    public static User fromJson(String obj) {
+        return table.fromJson(obj);
     }
 
     public static List<User> load() {

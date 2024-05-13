@@ -25,12 +25,44 @@ public final class Hotel {
         table.save(hotels);
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public String getCity() {
         return city;
     }
 
-    public Integer getId() {
-        return id;
+    public String getPhone() {
+        return phone;
+    }
+
+    public List<String> getServices() {
+        return services;
+    }
+
+    public Float getRate() {
+        return rate;
+    }
+
+    public HashMap<String, Float> getRatings() {
+        return ratings;
+    }
+
+    public String toJson() {
+        return table.toJson(this);
+    }
+
+    public static Hotel fromJson(String obj) {
+        return table.fromJson(obj);
     }
 
     private static final class HotelTable extends JsonTable<Hotel> {
