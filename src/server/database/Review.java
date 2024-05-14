@@ -51,6 +51,18 @@ public final class Review {
         table.save(reviews);
     }
 
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void set(Review review) {
+        this.hotel = review.getHotel();
+        this.user = review.getUser();
+        setDate(review.getDate());
+        this.rate = review.getRate();
+        this.ratings.putAll(review.getRatings());
+    }
+
     private static final class ReviewTable extends JsonTable<Review> {
 
         public ReviewTable(String _fileName) {
