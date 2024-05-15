@@ -11,6 +11,7 @@ public final class Server {
     private static final Listener listener = Listener.getInstance();
     private static final Dispatcher dispatcher = Dispatcher.getInstance();
     private static final Database database = Database.getInstance();
+    private static final RankManager rankManager = RankManager.getInstance();
 
     private volatile boolean running = true;
 
@@ -31,6 +32,7 @@ public final class Server {
 
     public synchronized void setup() {
         try {
+            rankManager.update();
             database.commit();
             listener.setup();
             dispatcher.setup();

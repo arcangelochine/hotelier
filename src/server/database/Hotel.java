@@ -57,6 +57,14 @@ public final class Hotel {
         return ratings;
     }
 
+    public void setRate(Float rate) {
+        this.rate = rate;
+    }
+
+    public void setRatings(HashMap<String, Float> ratings) {
+        this.ratings.putAll(ratings);
+    }
+
     public String toJson() {
         return table.toJson(this);
     }
