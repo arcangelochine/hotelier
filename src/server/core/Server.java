@@ -15,7 +15,7 @@ public final class Server {
 
     private volatile boolean running = true;
 
-    public synchronized static Server getInstance() {
+    public static Server getInstance() {
         if (instance == null)
             instance = new Server();
         return instance;
