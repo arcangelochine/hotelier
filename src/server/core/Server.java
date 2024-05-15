@@ -30,7 +30,7 @@ public final class Server {
         return running;
     }
 
-    public synchronized void setup() {
+    public void setup() {
         try {
             rankManager.update();
             database.commit();
@@ -42,7 +42,7 @@ public final class Server {
         }
     }
 
-    public synchronized void run() {
+    public void run() {
         logger.out("Server listening on port: " + ServerConfiguration.getInstance().getPort());
 
         while (running)
