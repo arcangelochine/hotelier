@@ -14,26 +14,28 @@ public final class Response {
 
     private final ResponseStatus status;
     private final String body;
+    private final String content;
 
-    private Response(ResponseStatus status, String body) {
+    private Response(ResponseStatus status, String body, String content) {
         this.status = status;
         this.body = body;
+        this.content = content;
     }
 
-    public static Response ok(String body) {
-        return new Response(ResponseStatus.OK, body);
+    public static Response ok(String body, String content) {
+        return new Response(ResponseStatus.OK, body, content);
     }
 
-    public static Response ko(String body) {
-        return new Response(ResponseStatus.KO, body);
+    public static Response ko(String body, String content) {
+        return new Response(ResponseStatus.KO, body, null);
     }
 
     public static Response notFound(String body) {
-        return new Response(ResponseStatus.NOT_FOUND, body);
+        return new Response(ResponseStatus.NOT_FOUND, body, null);
     }
 
     public static Response bad() {
-        return new Response(ResponseStatus.BAD, "Bad request.");
+        return new Response(ResponseStatus.BAD, "Bad request.", null);
     }
 
     public ResponseStatus getStatus() {
@@ -42,6 +44,10 @@ public final class Response {
 
     public String getBody() {
         return body;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public String toJson() {
