@@ -1,6 +1,7 @@
 LIBS = lib/gson-2.10.1.jar
 
 SERVER_DEPS = server/*.class server/database/*.class server/util/*.class server/core/*.class server/protocol/*.class
+CLIENT_DEPS = client/*.class client/util/*.class client/protocol/*.class client/gui/*.class client/core/*.class
 
 server:
 	javac -cp $(LIBS):src -d . src/server/HOTELIERServerMain.java;
@@ -11,7 +12,7 @@ server:
 
 client:
 	javac -cp $(LIBS):src -d . src/client/HOTELIERCustomerClientMain.java;
-	jar -cmvf META-INF/CLIENT.MF HOTELIERclient.jar client/*.class $(LIBS);
+	jar -cmvf META-INF/CLIENT.MF HOTELIERclient.jar $(CLIENT_DEPS) $(LIBS);
 	rm -rf client;
 .PHONY: client
 .SILENT: client
