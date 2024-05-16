@@ -50,6 +50,7 @@ public final class RequestHandler implements Runnable {
                 byte[] bytes = new byte[buffer.remaining()];
                 buffer.get(bytes);
                 handle(new String(bytes).trim());
+                buffer.clear();
             }
         } catch (Exception e) {
             // TO-DO: investigate ClosedChannelException
@@ -100,7 +101,7 @@ public final class RequestHandler implements Runnable {
             case DEBUG:
                 return debug();
             default:
-                return Response.ko("Unknown method");
+                return Response.ko(request.getBody().trim(), "Unknown method");
         }
     }
 
@@ -130,7 +131,7 @@ public final class RequestHandler implements Runnable {
                     return Response.notFound(body[0] + " not found.");
             }
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.ko(request.getBody().trim(), e.getMessage());
         }
     }
 
@@ -141,12 +142,12 @@ public final class RequestHandler implements Runnable {
 
             switch (body.length) {
                 case 2:
-                    return Response.ok(hotelManager.getHotels(body[1])
+                    return Response.ok(request.getBody().trim(), hotelManager.getHotels(body[1])
                             .stream()
                             .map(Hotel::toJson)
                             .collect(Collectors.joining(",\n", "[", "]")));
                 case 3:
-                    return Response.ok(hotelManager.getHotels(body[1], body[2])
+                    return Response.ok(request.getBody().trim(), hotelManager.getHotels(body[1], body[2])
                             .stream()
                             .map(Hotel::toJson)
                             .collect(Collectors.joining(",\n", "[", "]")));
@@ -165,7 +166,7 @@ public final class RequestHandler implements Runnable {
         if (body.length != 2)
             return Response.bad();
 
-        return Response.ok(hotelManager.getReviews(Integer.parseInt(body[1]))
+        return Response.ok(request.getBody().trim(), hotelManager.getReviews(Integer.parseInt(body[1]))
                 .stream()
                 .map(Review::toJson)
                 .collect(Collectors.joining(",\n", "[", "]")));
@@ -179,9 +180,9 @@ public final class RequestHandler implements Runnable {
             if (body.length != 2)
                 return Response.bad();
 
-            return Response.ok(userManager.getUser(body[1]).toJson());
+            return Response.ok(request.getBody().trim(), userManager.getUser(body[1]).toJson());
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.ko(request.getBody().trim(), e.getMessage());
         }
     }
 
@@ -193,9 +194,9 @@ public final class RequestHandler implements Runnable {
             if (body.length != 2)
                 return Response.bad();
 
-            return Response.ok(userManager.getUser(body[1]).getBadge().toString());
+            return Response.ok(request.getBody().trim(), userManager.getUser(body[1]).getBadge().toString());
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.ko(request.getBody().trim(), e.getMessage());
         }
     }
 
@@ -208,23 +209,23 @@ public final class RequestHandler implements Runnable {
 
             switch (body[0].toLowerCase()) {
                 case "hotel":
-                    return Response.ko("Not implemented yet.");
+                    return Response.ko(request.getBody().trim(), "Not implemented yet.");
                 case "review":
                     return pushReview();
                 default:
                     return Response.bad();
             }
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.ko(request.getBody().trim(), e.getMessage());
         }
     }
 
     // [token] PUSH review { ... }
     private Response pushReview() {
         try {
-            return Response.ok(reviewManager.createReview(request.getToken(), request.getContent()));
+            return Response.ok(request.getBody().trim(), reviewManager.createReview(request.getToken(), request.getContent()));
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.ko(request.getBody().trim(), e.getMessage());
         }
     }
 
@@ -242,9 +243,9 @@ public final class RequestHandler implements Runnable {
             String username = body[0];
             String password = body[1];
 
-            return Response.ok(userManager.register(username, password));
+            return Response.ok(request.getBody().trim(), userManager.register(username, password));
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.ko(request.getBody().trim(), e.getMessage());
         }
     }
 
@@ -259,17 +260,17 @@ public final class RequestHandler implements Runnable {
         try {
             String token = request.getToken();
 
-            if (token != null)
-                return Response.ok(userManager.login(token).getUsername());
+            if (token != null && !token.isEmpty())
+                return Response.ok(request.getBody().trim(), userManager.login(token).getUsername());
 
             String[] body = request.getBody().trim().split(" ");
 
             if (body.length != 2)
                 return Response.bad();
 
-            return Response.ok(userManager.login(body[0], body[1]).getToken());
+            return Response.ok(request.getBody().trim(), userManager.login(body[0], body[1]).getToken());
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.ko(request.getBody().trim(), e.getMessage());
         }
     }
 
@@ -280,9 +281,9 @@ public final class RequestHandler implements Runnable {
      */
     private Response logout() {
         try {
-            return Response.ok(userManager.logout(request.getToken()).getToken());
+            return Response.ok(request.getBody().trim(), userManager.logout(request.getToken()).getToken());
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.ko(request.getBody().trim(), e.getMessage());
         }
     }
 
@@ -295,16 +296,16 @@ public final class RequestHandler implements Runnable {
             String token = request.getToken();
 
             if (token != null)
-                return Response.ok(userManager.logoff(token).toJson());
+                return Response.ok(request.getBody().trim(), userManager.logoff(token).toJson());
 
             String[] body = request.getBody().trim().split(" ");
 
             if (body.length != 1)
                 return Response.bad();
 
-            return Response.ok(userManager.logoff(body[0]).toJson());
+            return Response.ok(request.getBody().trim(), userManager.logoff(body[0]).toJson());
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.ko(request.getBody().trim(), e.getMessage());
         }
     }
 
@@ -314,22 +315,22 @@ public final class RequestHandler implements Runnable {
     private Response debug() {
         switch (request.getBody().toLowerCase()) {
             case "echo":
-                return Response.ok("echo");
+                return Response.ok(request.getBody().trim(), "echo");
             case "quit":
                 close();
                 // TO-DO: ClosedChannelException
-                return Response.ok("quit");
+                return Response.ok(request.getBody().trim(), "quit");
             case "commit":
                 database.commit();
-                return Response.ok("commit");
+                return Response.ok(request.getBody().trim(), "commit");
             case "rollback":
                 database.rollback();
-                return Response.ok("rollback");
+                return Response.ok(request.getBody().trim(), "rollback");
             case "shutdown":
                 server.shutdown();
-                return Response.ok("shutdown");
+                return Response.ok(request.getBody().trim(), "shutdown");
             default:
-                return Response.ko("Unknown command");
+                return Response.ko(request.getBody().trim(), "Unknown command");
         }
     }
 }
