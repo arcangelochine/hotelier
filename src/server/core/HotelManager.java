@@ -24,10 +24,15 @@ public class HotelManager {
     }
 
     public List<Hotel> getHotels(String city, String name) {
-        return database.getHotels().get(city)
+        List<Hotel> hotels = database.getHotels().get(city)
                 .stream()
                 .filter(hotel -> hotel.getName().equals(name))
                 .collect(Collectors.toList());
+
+        if (hotels.isEmpty())
+            return null;
+
+        return hotels;
     }
 
     public List<Review> getReviews(int hotel) {

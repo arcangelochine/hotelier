@@ -154,7 +154,7 @@ public final class RequestHandler implements Runnable {
                     return Response.bad();
             }
         } catch (Exception e) {
-            return Response.ko(e.getMessage());
+            return Response.notFound("Hotel(s) not found.");
         }
     }
 
