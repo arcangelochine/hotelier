@@ -1,6 +1,7 @@
 package server;
 
 import server.core.Server;
+import server.database.Database;
 import server.util.Logger;
 
 public final class HOTELIERServerMain {
@@ -11,7 +12,8 @@ public final class HOTELIERServerMain {
         setup();
         run();
 
-        // TO-DO: permanent save databases on shutdown and every 5 minutes!!!
+        // TO-DO: udp notification for new top 1
+        Database.getInstance().commit();
         logger.close();
     }
 

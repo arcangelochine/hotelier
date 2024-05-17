@@ -50,8 +50,17 @@ public class HotelPanel extends JPanel {
         hotelList.update(city, name);
     }
 
+    private void unsafeSearch() {
+        String city = cityField.getText();
+
+        if (city == null || city.isEmpty())
+            return;
+
+        search();
+    }
+
     public static void update() {
-        HotelPanel.getInstance().search();
+        HotelPanel.getInstance().unsafeSearch();
     }
 
     private static class TopBar extends JPanel {

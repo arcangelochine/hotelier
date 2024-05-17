@@ -20,19 +20,26 @@ public final class ServerConfiguration {
     private static final int MIN_THREADS = 1;
     private static final int MAX_THREADS = 100;
 
+    private static final long DEFAULT_AUTO_SAVE = 5;
+    private static final long MIN_AUTO_SAVE = 1;
+    private static final long MAX_AUTO_SAVE = 1440; // 1 day
+
     private static ServerConfiguration instance;
 
     private final int port;
     private final int threads;
+    private final long autoSave;
 
     private ServerConfiguration() {
         port = DEFAULT_PORT;
         threads = DEFAULT_THREADS;
+        autoSave = DEFAULT_AUTO_SAVE;
     }
 
-    private ServerConfiguration(int _port, int _threads) {
-        port = Utils.clamp(_port, MIN_PORT, MAX_PORT);
-        threads = Utils.clamp(_threads, MIN_THREADS, MAX_THREADS);
+    private ServerConfiguration(int port, int threads, long autoSave) {
+        this.port = Utils.clamp(port, MIN_PORT, MAX_PORT);
+        this.threads = Utils.clamp(threads, MIN_THREADS, MAX_THREADS);
+        this.autoSave = Utils.clamp(autoSave, MIN_AUTO_SAVE, MAX_AUTO_SAVE);
     }
 
     public int getPort() {
@@ -41,6 +48,10 @@ public final class ServerConfiguration {
 
     public int getThreads() {
         return threads;
+    }
+
+    public long getAutoSave() {
+        return autoSave;
     }
 
     public static ServerConfiguration getInstance() {
@@ -53,7 +64,7 @@ public final class ServerConfiguration {
         try {
             ServerConfiguration tempConfig = json.load(CONFIG_FILE);
 
-            instance = new ServerConfiguration(tempConfig.getPort(), tempConfig.getThreads());
+            instance = new ServerConfiguration(tempConfig.getPort(), tempConfig.getThreads(), tempConfig.getAutoSave());
             logger.log("Loaded server configuration file: " + CONFIG_FILE);
         } catch (Exception ignored) {
             createDefault();

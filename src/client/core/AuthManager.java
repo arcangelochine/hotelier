@@ -42,15 +42,7 @@ public class AuthManager implements ResponseListener {
             return response.getBody().equals(body);
         });
 
-        executor.execute(task);
-
-        try {
-            Boolean result = task.get();
-            client.setToken(response.getContent());
-            return result;
-        } catch (Exception ignored) {
-            return false;
-        }
+        return _login(task);
     }
 
     public boolean login(String username, String password) {
@@ -69,6 +61,10 @@ public class AuthManager implements ResponseListener {
             return response.getBody().equals(body);
         });
 
+        return _login(task);
+    }
+
+    private boolean _login(FutureTask<Boolean> task) {
         executor.execute(task);
 
         try {

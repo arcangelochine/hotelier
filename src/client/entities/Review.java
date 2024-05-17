@@ -22,6 +22,10 @@ public final class Review {
         this.ratings.putAll(ratings);
     }
 
+    public int getHotel() {
+        return hotel;
+    }
+
     public String toJson() {
         return json.toJson(this);
     }

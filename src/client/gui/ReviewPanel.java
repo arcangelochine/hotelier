@@ -1,11 +1,9 @@
 package client.gui;
 
-import client.core.Client;
-import client.core.RequestHandler;
+import client.core.HotelManager;
 import client.entities.Hotel;
 import client.entities.Review;
 import client.entities.User;
-import client.protocol.Request;
 import client.util.InputWithLabel;
 import client.util.Utils;
 
@@ -14,19 +12,18 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class ReviewPanel extends JDialog {
-    private static final RequestHandler requestHandler = RequestHandler.getInstance();
+    private static User user;
 
-    InputWithLabel rateInput = InputWithLabel.textInput("Rate", 5);
-    HashMap<String, InputWithLabel> ratingInputs = new HashMap<>();
+    private static final HotelManager hotelManager = HotelManager.getInstance();
+    private final InputWithLabel rateInput = InputWithLabel.textInput("Rate", 5);
+    private final HashMap<String, InputWithLabel> ratingInputs = new HashMap<>();
 
     private final Hotel hotel;
-    private final User user;
 
-    public ReviewPanel(Hotel hotel, User user) {
+    public ReviewPanel(Hotel hotel) {
         super();
 
         this.hotel = hotel;
-        this.user = user;
 
         setModal(true);
         setBounds(0, 0, 600, 400);
@@ -57,24 +54,53 @@ public class ReviewPanel extends JDialog {
         add(buttonPanel);
     }
 
-    private void addReview() {
-        try {
-            Integer id = hotel.getId();
-            String username = user.getUsername();
-            float rate = Float.parseFloat(rateInput.getText());
+    public static void setUser(User user) {
+        ReviewPanel.user = user;
+    }
 
-            HashMap<String, Float> ratings = new HashMap<>();
+    private void addReview() {
+        if (user == null) {
+            Utils.errorDialog("Not logged in.");
+            return;
+        }
+
+        if (!checkFields()) {
+            Utils.errorDialog("Invalid fields.");
+            return;
+        }
+
+        Integer id = hotel.getId();
+        String username = user.getUsername();
+        float rate = Float.parseFloat(rateInput.getText());
+        HashMap<String, Float> ratings = new HashMap<>();
+        ratingInputs.forEach((k, v) -> ratings.put(k, Float.parseFloat(v.getText())));
+
+        Review review = new Review(id, username, rate, ratings);
+
+        if (hotelManager.addReview(review))
+            HotelPanel.update();
+        else
+            Utils.errorDialog("Something went wrong");
+
+        setVisible(false);
+    }
+
+    private boolean checkFields() {
+        try {
+            float rate = Float.parseFloat(rateInput.getText());
+            final HashMap<String, Float> ratings = new HashMap<>();
             ratingInputs.forEach((k, v) -> ratings.put(k, Float.parseFloat(v.getText())));
 
-            Review review = new Review(id, username, rate, ratings);
+            if (rate < 0 || rate > 5)
+                return false;
 
-            requestHandler.send(Request.push(
-                    Client.getInstance().getToken(),
-                    "review",
-                    review.toJson()
-            ));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Fields not valid!", "Error", JOptionPane.ERROR_MESSAGE);
+            for (Float rating : ratings.values())
+                if (rating < 0 || rating > 5)
+                    return false;
+
+            return true;
+        } catch (Exception ignored) {
+            return false;
         }
     }
 }

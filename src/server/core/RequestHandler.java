@@ -208,9 +208,9 @@ public final class RequestHandler implements Runnable {
             String[] body = request.getBody().trim().split("/");
 
             switch (body[0].toLowerCase()) {
-                case "hotel":
+                case "hotels":
                     return Response.ko(request.getBody().trim(), "Not implemented yet.");
-                case "review":
+                case "reviews":
                     return pushReview();
                 default:
                     return Response.bad();
@@ -220,12 +220,12 @@ public final class RequestHandler implements Runnable {
         }
     }
 
-    // [token] PUSH review { ... }
+    // [token] PUSH reviews/[id] { ... }
     private Response pushReview() {
         try {
-            return Response.ok(request.getBody().trim(), reviewManager.createReview(request.getToken(), request.getContent()));
+            return Response.ok(request.getBody(), reviewManager.createReview(request.getToken(), request.getContent()));
         } catch (Exception e) {
-            return Response.ko(request.getBody().trim(), e.getMessage());
+            return Response.ko(request.getBody(), e.getMessage());
         }
     }
 

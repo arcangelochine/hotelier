@@ -1,6 +1,5 @@
 package client.gui;
 
-import client.core.Client;
 import client.entities.Hotel;
 import client.entities.User;
 import client.util.Utils;
@@ -27,7 +26,7 @@ public class HotelCard extends JPanel {
 
         JLabel nameLabel = new JLabel(hotel.getName());
         JLabel descriptionLabel = new JLabel(hotel.getDescription());
-        JLabel rateLabel = new JLabel("Rate: " + hotel.getRate() + " / 5");
+        JLabel rateLabel = new JLabel("Rate: " + String.format("%.2f", hotel.getRate()) + " / 5");
         JLabel ratingsLabel = new JLabel("Ratings:");
 
         add(nameLabel);
@@ -36,7 +35,7 @@ public class HotelCard extends JPanel {
         add(ratingsLabel);
 
         hotel.getRatings().forEach((k, v) -> {
-            JLabel rating = new JLabel(Utils.toTitleCase(k) + ": " + v + " / 5");
+            JLabel rating = new JLabel(Utils.toTitleCase(k) + ": " + String.format("%.2f", v) + " / 5");
             rating.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
             add(rating);
         });
@@ -65,7 +64,7 @@ public class HotelCard extends JPanel {
     }
 
     private void review() {
-        ReviewPanel reviewPanel = new ReviewPanel(hotel, user);
+        ReviewPanel reviewPanel = new ReviewPanel(hotel);
         reviewPanel.setVisible(true);
     }
 }

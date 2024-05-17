@@ -3,6 +3,7 @@ package client.core;
 import client.entities.User;
 import client.gui.HotelCard;
 import client.gui.HotelPanel;
+import client.gui.ReviewPanel;
 import client.gui.UserButton;
 
 public class Client {
@@ -36,6 +37,7 @@ public class Client {
         UserButton.getInstance().setUser(user);
         HotelCard.setUser(user);
         HotelPanel.update();
+        ReviewPanel.setUser(user);
     }
 
     public synchronized void setToken(String token) {

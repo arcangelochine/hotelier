@@ -1,6 +1,7 @@
 package client.core;
 
 import client.entities.Hotel;
+import client.entities.Review;
 import client.protocol.Request;
 import client.protocol.Response;
 
@@ -57,6 +58,33 @@ public class HotelManager implements ResponseListener {
             return task.get();
         } catch (Exception ignored) {
             return new ArrayList<>();
+        }
+    }
+
+    public boolean addReview(Review review) {
+        FutureTask<Boolean> task = new FutureTask<>(() -> {
+            String body = "reviews/" + review.getHotel();
+
+            requestHandler.send(Request.push(client.getToken(), body, review.toJson()));
+
+            synchronized (HotelManager.this) {
+                HotelManager.this.wait();
+            }
+
+            if (response == null)
+                return false;
+            if (response.getStatus() != Response.ResponseStatus.OK)
+                return false;
+
+            return response.getBody().equals(body);
+        });
+
+        executor.execute(task);
+
+        try {
+            return task.get();
+        } catch (Exception ignored) {
+            return false;
         }
     }
 
