@@ -28,7 +28,6 @@ public class ClientFrame extends JFrame {
 
         // inject dependency
         AuthPanel.setFrame(this);
-        HotelPanel.setFrame(this);
         UserButton.setFrame(this);
         UserPanel.setFrame(this);
 

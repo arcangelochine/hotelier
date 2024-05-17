@@ -10,7 +10,6 @@ import java.awt.*;
 
 public class HotelPanel extends JPanel {
     private static HotelPanel instance;
-    private static ClientFrame frame;
 
     private static final RequestHandler requestHandler = RequestHandler.getInstance();
     private static final HotelList hotelList = HotelList.getInstance();
@@ -57,10 +56,6 @@ public class HotelPanel extends JPanel {
 
         hotelList.setLastRequest(request);
         requestHandler.send(Request.get(ClientConfiguration.getInstance().getToken(), request));
-    }
-
-    public static void setFrame(ClientFrame frame) {
-        HotelPanel.frame = frame;
     }
 
     private static class TopBar extends JPanel {
