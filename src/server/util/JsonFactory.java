@@ -17,7 +17,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class JsonFactory<T> {
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .serializeNulls()
+            .create();
 
     private final Type type;
     private final Type typeList;
