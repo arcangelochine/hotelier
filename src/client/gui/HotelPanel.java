@@ -13,6 +13,7 @@ public class HotelPanel extends JPanel {
     private static ClientFrame frame;
 
     private static final RequestHandler requestHandler = RequestHandler.getInstance();
+    private static final HotelList hotelList = HotelList.getInstance();
 
     // fields
     private final InputWithLabel city = InputWithLabel.textInput("City", 64);
@@ -35,28 +36,27 @@ public class HotelPanel extends JPanel {
         topBar.add(city);
         topBar.add(name);
         topBar.add(searchButton);
+        topBar.add(UserButton.getInstance());
 
         add(topBar, BorderLayout.NORTH);
-
-        HotelList hotels = new HotelList();
-
-        add(hotels, BorderLayout.CENTER);
+        add(hotelList, BorderLayout.CENTER);
     }
 
     private void search() {
-        String resource = "hotel/";
+        String request = "hotel/";
 
         if (city.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "City field is empty!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        resource += city.getText();
+        request += city.getText();
 
         if (!name.getText().isEmpty())
-            resource += "/" + name.getText();
+            request += "/" + name.getText();
 
-        requestHandler.send(Request.get(ClientConfiguration.getInstance().getToken(), resource));
+        hotelList.setLastRequest(request);
+        requestHandler.send(Request.get(ClientConfiguration.getInstance().getToken(), request));
     }
 
     public static void setFrame(ClientFrame frame) {
@@ -67,9 +67,5 @@ public class HotelPanel extends JPanel {
         public TopBar() {
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         }
-    }
-
-    private static class HotelList extends JPanel {
-
     }
 }

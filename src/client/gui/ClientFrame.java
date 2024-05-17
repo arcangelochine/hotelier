@@ -29,6 +29,8 @@ public class ClientFrame extends JFrame {
         // inject dependency
         AuthPanel.setFrame(this);
         HotelPanel.setFrame(this);
+        UserButton.setFrame(this);
+        UserPanel.setFrame(this);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
@@ -44,6 +46,10 @@ public class ClientFrame extends JFrame {
 
         add(container);
         setVisible(true);
+    }
+
+    public void viewAuth() {
+        layout.show(container, "auth");
     }
 
     public void viewHotel() {

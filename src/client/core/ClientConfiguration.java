@@ -15,7 +15,7 @@ public class ClientConfiguration {
 
     private final int port;
     private final String host;
-    private final String token;
+    private String token;
 
     private ClientConfiguration() {
         port = DEFAULT_PORT;
@@ -45,6 +45,15 @@ public class ClientConfiguration {
 
     public String getToken() {
         return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+
+        try {
+            json.save(CONFIG_FILE, instance);
+        } catch (Exception ignored) {
+        }
     }
 
     private static void create() {

@@ -48,6 +48,10 @@ public final class Request {
         return new Request(RequestMethod.LOGOUT, token, null, null);
     }
 
+    public static Request logoff(String token, String username) {
+        return new Request(RequestMethod.LOGOFF, token, username, null);
+    }
+
     public static Request debug(String token, String body) {
         return new Request(RequestMethod.DEBUG, token, body, null);
     }
