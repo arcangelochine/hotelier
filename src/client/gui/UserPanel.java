@@ -44,10 +44,6 @@ public class UserPanel extends JDialog {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-        JButton logoff = new JButton("Logoff");
-        logoff.addActionListener(e -> logoff());
-        buttonPanel.add(logoff);
-
         JButton logout = new JButton("Logout");
         logout.addActionListener(e -> logout());
         buttonPanel.add(logout);
