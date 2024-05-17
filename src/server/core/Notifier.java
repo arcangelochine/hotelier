@@ -4,6 +4,8 @@ import server.database.Database;
 import server.database.Hotel;
 import server.util.Logger;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -20,7 +22,7 @@ public class Notifier implements Runnable {
     private static final Database database = Database.getInstance();
     private static final HashMap<String, Hotel> topHotels = new HashMap<>();
 
-    private static ByteBuffer buffer;
+    private static byte[] buffer = new byte[BUF_LENGTH];
     private static InetAddress address;
     private static final int port = 4000;
     private static MulticastSocket socket;
@@ -30,7 +32,6 @@ public class Notifier implements Runnable {
             address = InetAddress.getByName("224.0.0.0");
             socket = new MulticastSocket(port);
             socket.joinGroup(address);
-            buffer = ByteBuffer.allocate(BUF_LENGTH);
             logger.out("Notifier ready to go!");
         } catch (Exception e) {
             logger.err("Could not setup Notifier: " + e.getMessage());
@@ -65,15 +66,18 @@ public class Notifier implements Runnable {
             return;
 
         try {
-            buffer.put((city + ";" + hotelName).getBytes());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            DataOutputStream dataStream = new DataOutputStream(outputStream);
+            DatagramPacket packet = new DatagramPacket(buffer, BUF_LENGTH, address, port);
 
-            buffer.flip();
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-            buffer.clear();
+            dataStream.writeUTF(hotelName + " is now the best hotel in " + city + "!");
 
-            DatagramPacket packet = new DatagramPacket(bytes, bytes.length, address, port);
+            byte[] bytes = outputStream.toByteArray();
+            packet.setData(bytes);
+            packet.setLength(bytes.length);
+
             socket.send(packet);
+            outputStream.reset();
             logger.out("Notify sent");
         } catch (Exception e) {
             logger.err("Could not send notify: " + e.getMessage());

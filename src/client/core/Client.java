@@ -6,12 +6,17 @@ import client.gui.HotelPanel;
 import client.gui.ReviewPanel;
 import client.gui.UserButton;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Client {
     private static Client instance;
 
     private static final Listener listener = Listener.getInstance();
     private static final Controller controller = Controller.getInstance();
     private static final ClientConfiguration config = ClientConfiguration.getInstance();
+
+    ExecutorService notificationListener = Executors.newSingleThreadExecutor();
 
     private User user;
     private String token;
@@ -23,11 +28,14 @@ public class Client {
     }
 
     public synchronized void setup() {
+        NotificationManager.setup();
+
         controller.addResponseListener(AuthManager.getInstance());
         controller.addResponseListener(HotelManager.getInstance());
     }
 
     public void run() {
+        notificationListener.submit(new NotificationManager());
         listener.listen();
     }
 

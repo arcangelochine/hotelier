@@ -29,7 +29,6 @@ public class UserPanel extends JDialog {
         setLayout(new BorderLayout());
         getRootPane().setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Center content panel
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
