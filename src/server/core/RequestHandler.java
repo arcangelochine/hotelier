@@ -278,34 +278,53 @@ public final class RequestHandler implements Runnable {
      * LOGOUT token - effettua il logout di un utente tramite token, in caso di successo imposta la data
      * di scadenza della sessione al momento del logout
      * Il body della richiesta viene ignorato
+     * la response di logout contiene il token della sessione terminata nel body
      */
     private Response logout() {
+        String token = request.getToken();
+
+        if (token == null)
+            return Response.ko(null, "Not logged in.");
+
         try {
-            return Response.ok(request.getBody().trim(), userManager.logout(request.getToken()).getToken());
+            userManager.logout(token);
+            return Response.ok(token, null);
         } catch (Exception e) {
-            return Response.ko(request.getBody().trim(), e.getMessage());
+            return Response.ko(token, e.getMessage());
         }
     }
 
     /**
-     * LOGOFF token - termina tutte le sessioni dell'utente associato al token di sessione
      * LOGOFF username - termina tutte le sessioni dell'utente associato allo username
+     * per poter eseguire il logoff è necessario essere autenticati
+     * la response di logoff contiene il nome dell'utente nel body
      */
     private Response logoff() {
+        String token = request.getToken();
+        String body = request.getBody();
+
+        if (token == null)
+            return Response.ko(request.getBody().trim(), "Not logged in.");
+
+        if (body == null)
+            return Response.bad();
+
+        String[] args = body.trim().split(" ");
+
+        if (args.length != 1)
+            return Response.bad();
+
+        String username = args[0];
+
         try {
-            String token = request.getToken();
+            // token non appartenente all'utente di cui si desidera fare il logoff
+            if (!userManager.getUser(token).getUsername().equals(username))
+                return Response.ko(request.getBody().trim(), "Unauthorized.");
 
-            if (token != null)
-                return Response.ok(request.getBody().trim(), userManager.logoff(token).toJson());
-
-            String[] body = request.getBody().trim().split(" ");
-
-            if (body.length != 1)
-                return Response.bad();
-
-            return Response.ok(request.getBody().trim(), userManager.logoff(body[0]).toJson());
+            userManager.logoff(token);
+            return Response.ok(username, null);
         } catch (Exception e) {
-            return Response.ko(request.getBody().trim(), e.getMessage());
+            return Response.ko(username, null);
         }
     }
 

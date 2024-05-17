@@ -18,7 +18,6 @@ public class HotelManager {
         return instance;
     }
 
-    // TO-DO: ranking system
     public List<Hotel> getHotels(String city) {
         return database.getHotels().get(city);
     }

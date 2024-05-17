@@ -33,7 +33,7 @@ public final class Request {
     }
 
     public static Request push(String token, String body, String content) {
-        return new Request(RequestMethod.PUSH, token, body, null);
+        return new Request(RequestMethod.PUSH, token, body, content);
     }
 
     public static Request register(String body) {
