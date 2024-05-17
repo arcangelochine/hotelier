@@ -2,6 +2,7 @@ package client.core;
 
 import client.protocol.Response;
 import client.util.Logger;
+import client.util.Utils;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -30,9 +31,7 @@ public class Controller {
 
         // TO-DO: fix wrong res.getBody (spoiler: make better try catch in server with public exceptions!)
         if (res.getStatus() != Response.ResponseStatus.OK)
-            SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(null, res.getBody(), "Error", JOptionPane.ERROR_MESSAGE);
-            });
+            Utils.errorDialog(res.getBody());
 
         for (ResponseListener listener : listeners) {
             listener.onResponse(res);

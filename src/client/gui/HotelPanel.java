@@ -1,9 +1,7 @@
 package client.gui;
 
-import client.core.ClientConfiguration;
-import client.core.RequestHandler;
-import client.protocol.Request;
 import client.util.InputWithLabel;
+import client.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,12 +9,11 @@ import java.awt.*;
 public class HotelPanel extends JPanel {
     private static HotelPanel instance;
 
-    private static final RequestHandler requestHandler = RequestHandler.getInstance();
     private static final HotelList hotelList = HotelList.getInstance();
 
     // fields
-    private final InputWithLabel city = InputWithLabel.textInput("City", 64);
-    private final InputWithLabel name = InputWithLabel.textInput("Name", 64);
+    private final InputWithLabel cityField = InputWithLabel.textInput("City", 64);
+    private final InputWithLabel nameField = InputWithLabel.textInput("Name", 64);
 
     public static HotelPanel getInstance() {
         if (instance == null)
@@ -32,8 +29,8 @@ public class HotelPanel extends JPanel {
         searchButton.addActionListener(e -> search());
 
         TopBar topBar = new TopBar();
-        topBar.add(city);
-        topBar.add(name);
+        topBar.add(cityField);
+        topBar.add(nameField);
         topBar.add(searchButton);
         topBar.add(UserButton.getInstance());
 
@@ -42,20 +39,19 @@ public class HotelPanel extends JPanel {
     }
 
     private void search() {
-        String request = "hotel/";
+        String city = cityField.getText();
+        String name = nameField.getText();
 
-        if (city.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "City field is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+        if (city == null || city.isEmpty()) {
+            Utils.errorDialog("City field is empty!");
             return;
         }
 
-        request += city.getText();
+        hotelList.update(city, name);
+    }
 
-        if (!name.getText().isEmpty())
-            request += "/" + name.getText();
-
-        hotelList.setLastRequest(request);
-        requestHandler.send(Request.get(ClientConfiguration.getInstance().getToken(), request));
+    public static void update() {
+        HotelPanel.getInstance().search();
     }
 
     private static class TopBar extends JPanel {

@@ -7,6 +7,7 @@ import client.entities.Review;
 import client.entities.User;
 import client.protocol.Request;
 import client.util.InputWithLabel;
+import client.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +38,7 @@ public class ReviewPanel extends JDialog {
         add(rateInput);
 
         hotel.getRatings().forEach((k, v) -> {
-            InputWithLabel ratingField = InputWithLabel.textInput(k, 5);
+            InputWithLabel ratingField = InputWithLabel.textInput(Utils.toTitleCase(k), 5);
             ratingInputs.put(k, ratingField);
             add(ratingField);
         });

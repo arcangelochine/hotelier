@@ -1,19 +1,16 @@
 package client.gui;
 
-import client.core.ResponseListener;
-import client.entities.Hotel;
-import client.protocol.Response;
+import client.core.HotelManager;
 
 import javax.swing.*;
-import java.util.List;
 
 import java.awt.*;
 
-public class HotelList extends JPanel implements ResponseListener {
+public class HotelList extends JPanel {
     private static HotelList instance;
     private final JPanel contentPanel;
 
-    private String lastRequest;
+    private static final HotelManager hotelManager = HotelManager.getInstance();
 
     private HotelList() {
         setLayout(new BorderLayout());
@@ -33,29 +30,9 @@ public class HotelList extends JPanel implements ResponseListener {
         return instance;
     }
 
-    public void setLastRequest(String lastRequest) {
-        this.lastRequest = lastRequest;
-    }
-
-    @Override
-    public void onResponse(Response response) {
-        if (response.getStatus() != Response.ResponseStatus.OK)
-            return;
-
-        if (!response.getBody().equals(lastRequest))
-            return;
-
-        String content = response.getContent();
+    public void update(String city, String name) {
         contentPanel.removeAll();
-
-        try {
-            List<Hotel> hotels = Hotel.parseList(content);
-
-            // hotels.forEach(hotel -> contentPanel.add(new HotelCard(hotel)));
-        } catch (Exception ignored) {
-            // ignore non-hotel responses
-        }
-
+        hotelManager.getHotels(city, name).forEach(hotel -> contentPanel.add(new HotelCard(hotel)));
         contentPanel.revalidate();
     }
 }

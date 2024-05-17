@@ -1,7 +1,9 @@
 package client.gui;
 
+import client.core.Client;
 import client.entities.Hotel;
 import client.entities.User;
+import client.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,12 +14,12 @@ public class HotelCard extends JPanel {
     private static final Color DEFAULT_COLOR = Color.WHITE;
     private static final Color HOVER_COLOR = new Color(220, 220, 220);
 
-    private final Hotel hotel;
-    private final User user;
+    private static User user;
 
-    public HotelCard(Hotel hotel, User user) {
+    private final Hotel hotel;
+
+    public HotelCard(Hotel hotel) {
         this.hotel = hotel;
-        this.user = user;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -34,7 +36,7 @@ public class HotelCard extends JPanel {
         add(ratingsLabel);
 
         hotel.getRatings().forEach((k, v) -> {
-            JLabel rating = new JLabel(k + ": " + v + " / 5");
+            JLabel rating = new JLabel(Utils.toTitleCase(k) + ": " + v + " / 5");
             rating.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
             add(rating);
         });
@@ -56,6 +58,10 @@ public class HotelCard extends JPanel {
                 setBackground(DEFAULT_COLOR);
             }
         });
+    }
+
+    public static void setUser(User user) {
+        HotelCard.user = user;
     }
 
     private void review() {
