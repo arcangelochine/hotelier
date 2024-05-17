@@ -18,12 +18,6 @@ public final class Session implements Comparable<Session> {
         this.expires = LocalDateTime.now().plusYears(1);
     }
 
-    public Session(String token, String user, LocalDateTime expires) {
-        this.token = token;
-        this.user = user;
-        this.expires = expires;
-    }
-
     public String getToken() {
         return token;
     }
@@ -58,7 +52,6 @@ public final class Session implements Comparable<Session> {
     }
 
     private static final class SessionTable extends JsonTable<Session> {
-
         public SessionTable(String _fileName) {
             super(_fileName);
         }

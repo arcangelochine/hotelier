@@ -2,6 +2,7 @@ package server.core;
 
 import server.database.Database;
 import server.database.Review;
+import server.database.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,12 +46,16 @@ public class ReviewManager {
                 .filter(r -> r.getUser().equals(username))
                 .findFirst();
 
-        if (opt.isPresent())
+        if (opt.isPresent()) {
             opt.get().set(review);
-        else
+        } else {
             reviews.add(review);
 
-        // TO-DO: increase expertise
+            database.getUsers()
+                    .stream()
+                    .filter(u -> u.getUsername().equals(username))
+                    .forEach(User::upgradeBadge);
+        }
 
         return review.toJson();
     }

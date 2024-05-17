@@ -21,12 +21,14 @@ public class Notifier implements Runnable {
     private static final HashMap<String, Hotel> topHotels = new HashMap<>();
 
     private static ByteBuffer buffer;
+    private static InetAddress address;
+    private static final int port = 4000;
     private static MulticastSocket socket;
 
     public static void setup() {
         try {
-            InetAddress address = InetAddress.getByName("224.0.0.0");
-            socket = new MulticastSocket(4000);
+            address = InetAddress.getByName("224.0.0.0");
+            socket = new MulticastSocket(port);
             socket.joinGroup(address);
             buffer = ByteBuffer.allocate(BUF_LENGTH);
             logger.out("Notifier ready to go!");
@@ -70,7 +72,7 @@ public class Notifier implements Runnable {
             buffer.get(bytes);
             buffer.clear();
 
-            DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
+            DatagramPacket packet = new DatagramPacket(bytes, bytes.length, address, port);
             socket.send(packet);
             logger.out("Notify sent");
         } catch (Exception e) {

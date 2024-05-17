@@ -12,7 +12,6 @@ public final class HOTELIERServerMain {
         setup();
         run();
 
-        // TO-DO: udp notification for new top 1
         Database.getInstance().commit();
         logger.close();
     }
