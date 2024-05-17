@@ -14,7 +14,6 @@ public class ReviewManager {
     private static final Database database = Database.getInstance();
     private static final UserManager userManager = UserManager.getInstance();
     private static final SessionManager sessionManager = SessionManager.getInstance();
-    private static final RankManager rankManager = RankManager.getInstance();
 
     public static ReviewManager getInstance() {
         if (instance == null)
@@ -51,7 +50,7 @@ public class ReviewManager {
         else
             reviews.add(review);
 
-        rankManager.update();
+        // TO-DO: increase expertise
 
         return review.toJson();
     }

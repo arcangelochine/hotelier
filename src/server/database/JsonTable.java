@@ -29,8 +29,8 @@ public abstract class JsonTable<T> {
             List<T> data = json.loadList(fileName);
             logger.out("Loaded " + data.size() + " items from " + fileName);
             return data;
-        } catch (Exception ignored) {
-            logger.err("Failed to load items from " + fileName);
+        } catch (Exception e) {
+            logger.err("Failed to load items from " + fileName + ":" + e.getClass().getName());
             return new ArrayList<>();
         }
     }
@@ -39,8 +39,8 @@ public abstract class JsonTable<T> {
         try {
             json.saveList(fileName, data);
             logger.out("Saved " + data.size() + " items to " + fileName);
-        } catch (Exception ignored) {
-            logger.err("Failed to save items to " + fileName);
+        } catch (Exception e) {
+            logger.err("Failed to save items to " + fileName + ": " + e.getMessage());
         }
     }
 

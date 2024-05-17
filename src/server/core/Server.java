@@ -17,7 +17,8 @@ public final class Server {
     private static final Dispatcher dispatcher = Dispatcher.getInstance();
     private static final Database database = Database.getInstance();
     private static final RankManager rankManager = RankManager.getInstance();
-    private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService autoSaver = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService notifier = Executors.newSingleThreadScheduledExecutor();
 
     private volatile boolean running = true;
 
@@ -42,6 +43,7 @@ public final class Server {
             database.commit();
             listener.setup();
             dispatcher.setup();
+            Notifier.setup();
             logger.out("Server configuration loaded.");
         } catch (IOException ignored) {
             logger.err("Failed to configure the server.");
@@ -51,7 +53,7 @@ public final class Server {
     public synchronized void run() {
         logger.out("Server listening on port: " + config.getPort());
 
-        autosave();
+        launchThreads();
 
         while (running)
             listener.listen();
@@ -59,7 +61,8 @@ public final class Server {
         logger.out("Server shutting down...");
     }
 
-    private void autosave() {
-        executor.scheduleWithFixedDelay(new AutoSave(), config.getAutoSave(), config.getAutoSave(), TimeUnit.MINUTES);
+    private void launchThreads() {
+        autoSaver.scheduleWithFixedDelay(new AutoSave(), config.getAutoSave(), config.getAutoSave(), TimeUnit.MINUTES);
+        notifier.scheduleWithFixedDelay(new Notifier(), 0, 10, TimeUnit.SECONDS);
     }
 }
