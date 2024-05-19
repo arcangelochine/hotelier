@@ -11,17 +11,17 @@ import java.net.MulticastSocket;
 
 public class NotificationManager implements Runnable {
     private static final int BUF_LENGTH = 1024;
+    private static final String ADDRESS = "224.0.0.0";
 
     private static final Logger logger = Logger.getInstance();
 
-    private static byte[] buffer = new byte[BUF_LENGTH];
-    private static InetAddress address;
+    private static final byte[] buffer = new byte[BUF_LENGTH];
     private static final int port = 4000;
     private static MulticastSocket socket;
 
     public static void setup() {
         try {
-            address = InetAddress.getByName("224.0.0.0");
+            InetAddress address = InetAddress.getByName(ADDRESS);
             socket = new MulticastSocket(port);
             socket.joinGroup(address);
             logger.out("NotificationManager ready to go!");
