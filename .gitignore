@@ -5,6 +5,7 @@ out
 *.xml
 *.json
 *.log
+*.pdf
 .DS_Store
 
 !lib/*.jar
