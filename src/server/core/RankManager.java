@@ -3,6 +3,7 @@ package server.core;
 import server.database.Database;
 import server.database.Hotel;
 import server.database.Review;
+import server.util.Logger;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -13,6 +14,7 @@ import java.util.List;
 public class RankManager {
     private static RankManager instance;
 
+    private static final Logger logger = Logger.getInstance();
     private static final Database database = Database.getInstance();
 
     public static RankManager getInstance() {
@@ -23,6 +25,7 @@ public class RankManager {
 
     public void update() {
         database.getHotels().forEach((k ,v) -> v.sort(Comparator.comparing(RankManager::getRank).reversed()));
+        logger.log("Rank manager updated.");
     }
 
     private static Float getRank(Hotel hotel) {

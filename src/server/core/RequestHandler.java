@@ -51,9 +51,11 @@ public final class RequestHandler implements Runnable {
                 buffer.get(bytes);
                 handle(new String(bytes).trim());
                 buffer.clear();
+
+                key.interestOps(SelectionKey.OP_READ);
+                key.selector().wakeup();
             }
         } catch (Exception e) {
-            // TO-DO: investigate ClosedChannelException
             logger.err(Thread.currentThread().getName() + " failed to read channel: " + e.getMessage());
         }
     }
