@@ -10,7 +10,7 @@ public class Notification extends JDialog {
         setModal(true);
         setBounds(50, 50, 400, 200);
         setResizable(false);
-        setTitle("User Info");
+        setTitle("Notification");
         setLayout(new BorderLayout());
         getRootPane().setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 

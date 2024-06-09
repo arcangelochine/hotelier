@@ -2,6 +2,7 @@ package client.gui;
 
 import client.core.AuthManager;
 import client.util.InputWithLabel;
+import client.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -82,12 +83,12 @@ public class AuthPanel extends JPanel {
 
     private boolean checkCredentials() {
         if (username.getText().isEmpty() || username.getText().length() > MAX_USERNAME_LENGTH) {
-            JOptionPane.showMessageDialog(null, "Username not valid!", "Error", JOptionPane.ERROR_MESSAGE);
+            Utils.errorDialog("Username not valid!");
             return false;
         }
 
         if (password.getPassword().isEmpty() || password.getPassword().length() > MAX_PASSWORD_LENGTH) {
-            JOptionPane.showMessageDialog(null, "Password not valid!", "Error", JOptionPane.ERROR_MESSAGE);
+            Utils.errorDialog("Password not valid!");
             return false;
         }
 

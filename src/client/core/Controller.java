@@ -4,7 +4,6 @@ import client.protocol.Response;
 import client.util.Logger;
 import client.util.Utils;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +28,8 @@ public class Controller {
 
         Response res = Response.parse(response);
 
-        // TO-DO: fix wrong res.getBody (spoiler: make better try catch in server with public exceptions!)
         if (res.getStatus() != Response.ResponseStatus.OK)
-            Utils.errorDialog(res.getBody());
+            Utils.errorDialog(res.getContent());
 
         for (ResponseListener listener : listeners) {
             listener.onResponse(res);
