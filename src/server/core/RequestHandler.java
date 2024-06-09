@@ -80,7 +80,6 @@ public final class RequestHandler implements Runnable {
 
             channel.write(ByteBuffer.wrap((genResponse().toJson() + "\n").getBytes()));
         } catch (Exception e) {
-            // TO-DO: investigate AsynchronousCloseException
             logger.out(Thread.currentThread().getName() + " " + channel.getRemoteAddress() + " -> " + req);
             channel.write(ByteBuffer.wrap((Response.bad().toJson() + "\n").getBytes()));
         }
@@ -107,20 +106,16 @@ public final class RequestHandler implements Runnable {
         }
     }
 
-    /**
-     * GET hotel city [name] - restituisce una lista di hotel, filtrata in base alla città (primo
-     * argomento) e in base al nome (secondo argomento, opzionale).
-     * GET user token|name - restituisce l'utente dato il token di sessione o dato il nome.
-     * GET badge token|name - restituisce il badge dell'utente dato il token di sessione o dato il nome.
-     */
+    // GET dispatcher
     private Response get() {
-        try {
-            String[] body = request.getBody().trim().split("/");
+        String body = request.getBody().trim();
+        String[] tokens = body.split("/");
 
-            if (body.length < 1)
+        try {
+            if (tokens.length < 1)
                 return Response.bad();
 
-            switch (body[0].toLowerCase()) {
+            switch (tokens[0].toLowerCase()) {
                 case "hotel":
                     return getHotel();
                 case "reviews":
@@ -130,25 +125,25 @@ public final class RequestHandler implements Runnable {
                 case "badge":
                     return getBadge();
                 default:
-                    return Response.notFound(body[0] + " not found.");
+                    return Response.notFound(body);
             }
         } catch (Exception e) {
-            return Response.ko(request.getBody().trim(), e.getMessage());
+            return Response.ko(body, e.getMessage());
         }
     }
 
-    // [token] GET hotel/city/name
+    // GET hotel/city/name
     private Response getHotel() {
         try {
             String[] body = request.getBody().trim().split("/");
 
             switch (body.length) {
-                case 2:
+                case 2: // by city
                     return Response.ok(request.getBody().trim(), hotelManager.getHotels(body[1])
                             .stream()
                             .map(Hotel::toJson)
                             .collect(Collectors.joining(",\n", "[", "]")));
-                case 3:
+                case 3: // by city and name
                     return Response.ok(request.getBody().trim(), hotelManager.getHotels(body[1], body[2])
                             .stream()
                             .map(Hotel::toJson)
@@ -161,7 +156,7 @@ public final class RequestHandler implements Runnable {
         }
     }
 
-    // [token] GET reviews/hotel
+    // GET reviews/hotel
     private Response getReviews() {
         String[] body = request.getBody().trim().split("/");
 
@@ -174,7 +169,7 @@ public final class RequestHandler implements Runnable {
                 .collect(Collectors.joining(",\n", "[", "]")));
     }
 
-    // [token] GET user/token|username
+    // GET user/<token|username>
     private Response getUser() {
         try {
             String[] body = request.getBody().trim().split("/");
@@ -188,7 +183,7 @@ public final class RequestHandler implements Runnable {
         }
     }
 
-    // [token] GET badge/token|username
+    // GET badge/<token|username>
     private Response getBadge() {
         try {
             String[] body = request.getBody().trim().split("/");
@@ -247,7 +242,7 @@ public final class RequestHandler implements Runnable {
 
             return Response.ok(request.getBody().trim(), userManager.register(username, password));
         } catch (Exception e) {
-            return Response.ko(request.getBody().trim(), e.getMessage());
+            return Response.ko(null, e.getMessage());
         }
     }
 
@@ -272,7 +267,7 @@ public final class RequestHandler implements Runnable {
 
             return Response.ok(request.getBody().trim(), userManager.login(body[0], body[1]).getToken());
         } catch (Exception e) {
-            return Response.ko(request.getBody().trim(), e.getMessage());
+            return Response.ko(null, e.getMessage());
         }
     }
 
@@ -326,13 +321,11 @@ public final class RequestHandler implements Runnable {
             userManager.logoff(token);
             return Response.ok(username, null);
         } catch (Exception e) {
-            return Response.ko(username, null);
+            return Response.ko(username, e.getMessage());
         }
     }
 
-    /**
-     * DEBUG command - esegue diversi comandi di debug
-     */
+    // DEBUG dispatcher
     private Response debug() {
         switch (request.getBody().toLowerCase()) {
             case "echo":
@@ -351,7 +344,7 @@ public final class RequestHandler implements Runnable {
                 server.shutdown();
                 return Response.ok(request.getBody().trim(), "shutdown");
             default:
-                return Response.ko(request.getBody().trim(), "Unknown command");
+                return Response.ko(request.getBody().trim(), "Unknown command.");
         }
     }
 }

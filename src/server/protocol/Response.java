@@ -10,6 +10,7 @@ public final class Response {
         BAD
     }
 
+    private static final String NOT_FOUND_MESSAGE = "Not found.";
     private static final JsonFactory<Response> json = new ResponseFactory();
 
     private final ResponseStatus status;
@@ -27,11 +28,11 @@ public final class Response {
     }
 
     public static Response ko(String body, String content) {
-        return new Response(ResponseStatus.KO, body, null);
+        return new Response(ResponseStatus.KO, body, content);
     }
 
     public static Response notFound(String body) {
-        return new Response(ResponseStatus.NOT_FOUND, body, null);
+        return new Response(ResponseStatus.NOT_FOUND, body, NOT_FOUND_MESSAGE);
     }
 
     public static Response bad() {
