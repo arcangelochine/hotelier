@@ -17,6 +17,7 @@ public class HotelManager implements ResponseListener {
     private static final Client client = Client.getInstance();
     private static final RequestHandler requestHandler = RequestHandler.getInstance();
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static final long HOTEL_TO = 60;
 
     private Response response;
 
@@ -39,7 +40,7 @@ public class HotelManager implements ResponseListener {
            requestHandler.send(Request.get(client.getToken(), body));
 
            synchronized (HotelManager.this) {
-               HotelManager.this.wait();
+               HotelManager.this.wait(HOTEL_TO);
            }
 
            if (response == null)
@@ -68,7 +69,7 @@ public class HotelManager implements ResponseListener {
             requestHandler.send(Request.push(client.getToken(), body, review.toJson()));
 
             synchronized (HotelManager.this) {
-                HotelManager.this.wait();
+                HotelManager.this.wait(HOTEL_TO);
             }
 
             if (response == null)

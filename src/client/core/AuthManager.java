@@ -14,6 +14,7 @@ public class AuthManager implements ResponseListener {
     private static final Client client = Client.getInstance();
     private static final RequestHandler requestHandler = RequestHandler.getInstance();
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static final long AUTH_TO = 60;
 
     private Response response;
 
@@ -32,7 +33,7 @@ public class AuthManager implements ResponseListener {
             requestHandler.send(Request.register(body));
 
             synchronized (AuthManager.this) {
-                AuthManager.this.wait();
+                AuthManager.this.wait(AUTH_TO);
             }
 
             if (response == null)
@@ -51,7 +52,7 @@ public class AuthManager implements ResponseListener {
             requestHandler.send(Request.login(null, body));
 
             synchronized (AuthManager.this) {
-                AuthManager.this.wait();
+                AuthManager.this.wait(AUTH_TO);
             }
 
             if (response == null)
@@ -87,7 +88,7 @@ public class AuthManager implements ResponseListener {
             requestHandler.send(Request.logout(token));
 
             synchronized (AuthManager.this) {
-                AuthManager.this.wait();
+                AuthManager.this.wait(AUTH_TO);
             }
 
             if (response == null)
@@ -106,7 +107,7 @@ public class AuthManager implements ResponseListener {
             requestHandler.send(Request.logoff(token, body));
 
             synchronized (AuthManager.this) {
-                AuthManager.this.wait();
+                AuthManager.this.wait(AUTH_TO);
             }
 
             if (response == null)
@@ -142,7 +143,7 @@ public class AuthManager implements ResponseListener {
             requestHandler.send(Request.get(client.getToken(), body));
 
             synchronized (AuthManager.this) {
-                AuthManager.this.wait();
+                AuthManager.this.wait(AUTH_TO);
             }
 
             if (response == null)
