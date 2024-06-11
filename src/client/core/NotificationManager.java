@@ -39,7 +39,7 @@ public class NotificationManager implements Runnable {
 
     private void listen() {
         try {
-            DatagramPacket packet = new DatagramPacket(buffer, BUF_LENGTH);
+            DatagramPacket packet = new DatagramPacket(buffer, BUF_LENGTH - 1);
             socket.receive(packet);
 
             ByteArrayInputStream byteStream = new ByteArrayInputStream(packet.getData(), 0, packet.getLength());
@@ -50,7 +50,7 @@ public class NotificationManager implements Runnable {
             Notification notification = new Notification(message);
             notification.setVisible(true);
         } catch (Exception e) {
-            logger.err("Error on receiving datagram: " + e.getClass());
+            logger.err("Error on receiving datagram: " + e.getMessage());
         }
     }
 }
