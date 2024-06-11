@@ -85,8 +85,8 @@ public class JsonFactory<T> {
     private static final class ListType implements ParameterizedType {
         private final Type type;
 
-        public ListType(Type _type) {
-            type = _type;
+        public ListType(Type type) {
+            this.type = type;
         }
 
         @Override
