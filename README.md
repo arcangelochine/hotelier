@@ -1,2 +1,2 @@
 # hotelier
-Progetto di esame per il corso di Laboratorio 3
+Progetto per l'esame di Laboratorio 3
